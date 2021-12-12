@@ -4,7 +4,6 @@ import com.company.webstore.dao.ProductDao;
 import com.company.webstore.dao.jdbc.mapper.ProductsRowMapper;
 import com.company.webstore.entity.Product;
 
-import javax.servlet.http.HttpServletRequest;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -79,15 +78,7 @@ public class JdbcProductDao implements ProductDao {
         }
     }
 
-    @Override
-    public Product getProductParameters(HttpServletRequest req) {
-        return  Product.builder()
-                .name(req.getParameter("name"))
-                .price(Double.parseDouble(req.getParameter("price")))
-                .description(req.getParameter("description"))
-                .build();
 
-    }
 
     private Connection getConnection() throws SQLException {
         return DriverManager.getConnection("jdbc:postgresql://localhost:5433/ws", "user", "pass");

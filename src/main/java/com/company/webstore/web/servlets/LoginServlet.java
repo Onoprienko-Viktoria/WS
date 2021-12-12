@@ -1,68 +1,60 @@
 package com.company.webstore.web.servlets;
 
 import com.company.webstore.entity.User;
-import com.company.webstore.service.UserService;
+import com.company.webstore.service.SecurityService;
 import com.company.webstore.web.utils.PageGenerator;
+import com.company.webstore.web.utils.WebUtils;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 
 public class LoginServlet extends HttpServlet {
-    private UserService userService;
-    private List<String> userTokens;
+    private SecurityService securityService;
 
-    public LoginServlet(UserService userService, List<String> userTokens) {
-        this.userService = userService;
-        this.userTokens = userTokens;
+    public LoginServlet(SecurityService securityService) {
+        this.securityService = securityService;
     }
 
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        PageGenerator pageGenerator = PageGenerator.instance();
-        String page = pageGenerator.getPage("login.html");
-        resp.getWriter().write(page);
+        String token = WebUtils.getUserToken(req);
+        boolean isAuth = securityService.isAuth(token);
+        if (!isAuth) {
+            PageGenerator pageGenerator = PageGenerator.instance();
+            String page = pageGenerator.getPage("login.html");
+            resp.getWriter().write(page);
+        } else {
+            resp.sendRedirect("/");
+        }
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        User user = User.builder()
-                .email(req.getParameter("email"))
-                .password(req.getParameter("password"))
-                .build();
-
-        try {
-            if (userService.isUserExists(user)) {
-                String userToken = UUID.randomUUID().toString();
-
-                userTokens.add(userToken);
-
-                Cookie cookie = new Cookie("user-token", userToken);
+        String token = WebUtils.getUserToken(req);
+        boolean isAuth = securityService.isAuth(token);
+        if (!isAuth) {
+            PageGenerator pageGenerator = PageGenerator.instance();
+            User user = User.builder()
+                    .email(req.getParameter("email"))
+                    .password(req.getParameter("password"))
+                    .build();
+            try {
+                token = securityService.signIn(user);
+                Cookie cookie = new Cookie("user-token", token);
                 resp.addCookie(cookie);
                 resp.sendRedirect("/");
-            } else {
+
+            } catch (Exception e) {
                 String errorMessage = "Wrong email or password!";
-                PageGenerator pageGenerator = PageGenerator.instance();
-
-                Map<String, Object> parameters = Map.of("errorMessage", errorMessage);
-                String page = pageGenerator.getPage("login.html", parameters);
-
+                String page = pageGenerator.getPageWithMessage("login.html", errorMessage);
                 resp.getWriter().write(page);
             }
-        } catch (Exception e) {
-            String errorMessage = "Something wrong!";
-            PageGenerator pageGenerator = PageGenerator.instance();
-
-            Map<String, Object> parameters = Map.of("errorMessage", errorMessage);
-            String page = pageGenerator.getPage("login.html", parameters);
-
-            resp.getWriter().write(page);
+        } else {
+            resp.sendRedirect("/");
         }
 
     }

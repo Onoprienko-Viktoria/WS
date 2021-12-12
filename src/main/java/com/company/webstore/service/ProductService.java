@@ -3,7 +3,6 @@ package com.company.webstore.service;
 import com.company.webstore.dao.ProductDao;
 import com.company.webstore.entity.Product;
 
-import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -37,10 +36,5 @@ public class ProductService {
         System.out.println("Product edited");
     }
 
-    public Product getProductParameters(HttpServletRequest req) {
-        Product product = productDao.getProductParameters(req);
-        System.out.println("Get product parameters");
-        return product;
-    }
 }
 

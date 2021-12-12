@@ -1,30 +1,29 @@
 package com.company.webstore.web.servlets;
 
 import com.company.webstore.service.ProductService;
-import com.company.webstore.service.UserService;
+import com.company.webstore.service.SecurityService;
+import com.company.webstore.web.utils.WebUtils;
 
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
 
 public class RemoveProductServlet extends HttpServlet {
     private ProductService productService;
-    private UserService userService;
-    private List<String> userTokens;
+    private SecurityService securityService;
 
-    public RemoveProductServlet(ProductService productService, UserService userService, List<String> userTokens) {
+    public RemoveProductServlet(ProductService productService, SecurityService securityService) {
         this.productService = productService;
-        this.userService = userService;
-        this.userTokens = userTokens;
+        this.securityService = securityService;
     }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        boolean isAuth = userService.isAuth(req, userTokens);
-        if (isAuth) {
+        String token = WebUtils.getUserToken(req);
+        boolean isAuth = securityService.isAuth(token);
+        if (isAuth){
             int id = Integer.parseInt(req.getParameter("id"));
             productService.removeProduct(id);
             resp.sendRedirect("/");

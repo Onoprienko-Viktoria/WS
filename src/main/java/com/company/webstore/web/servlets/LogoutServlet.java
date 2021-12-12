@@ -1,36 +1,33 @@
 package com.company.webstore.web.servlets;
 
 
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import com.company.webstore.service.SecurityService;
+import com.company.webstore.web.utils.WebUtils;
+
+import javax.servlet.http.*;
 import java.io.IOException;
-import java.util.List;
 
 public class LogoutServlet extends HttpServlet {
-    private List<String> userTokens;
+    private SecurityService securityService;
 
-    public LogoutServlet(List<String> userTokens) {
-        this.userTokens = userTokens;
+    public LogoutServlet(SecurityService securityService) {
+        this.securityService = securityService;
     }
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws  IOException {
-        Cookie[] cookies = req.getCookies();
-        Cookie cookieToRemove;
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("user-token")) {
-                    if (userTokens.contains(cookie.getValue())) {
-                        userTokens.remove(cookie.getValue());
-                        cookieToRemove = cookie;
-                        cookieToRemove.setMaxAge(0);
-                        resp.addCookie(cookieToRemove);
-                        resp.sendRedirect("/");
-                    }
-                }
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        String token = WebUtils.getUserToken(req);
+        boolean isAuth = securityService.isAuth(token);
+        if (isAuth) {
+            Cookie cookie = new Cookie("user-token", token);
+            if (securityService.removeCookie(cookie)) {
+                cookie.setMaxAge(0);
+                resp.addCookie(cookie);
+                resp.sendRedirect("/");
             }
+        } else {
+            resp.sendRedirect("/login");
         }
     }
 }
+
