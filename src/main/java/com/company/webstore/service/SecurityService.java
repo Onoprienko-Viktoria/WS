@@ -3,7 +3,6 @@ package com.company.webstore.service;
 import com.company.webstore.entity.User;
 import org.apache.commons.codec.digest.DigestUtils;
 
-import javax.servlet.http.Cookie;
 import java.util.*;
 
 public class SecurityService {

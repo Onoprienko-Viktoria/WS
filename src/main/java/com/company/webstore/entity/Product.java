@@ -17,4 +17,5 @@ public class Product {
     private double price;
     private String description;
     private LocalDate publishDate;
+    private String authorName;
 }

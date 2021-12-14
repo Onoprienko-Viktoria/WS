@@ -17,16 +17,11 @@ public class LogoutServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String token = WebUtils.getUserToken(req);
-        boolean isAuth = securityService.isAuth(token);
-        if (isAuth) {
-            Cookie cookie = new Cookie("user-token", token);
-            if (securityService.removeToken(token)) {
-                cookie.setMaxAge(0);
-                resp.addCookie(cookie);
-                resp.sendRedirect("/");
-            }
-        } else {
-            resp.sendRedirect("/login");
+        Cookie cookie = new Cookie("user-token", token);
+        if (securityService.removeToken(token)) {
+            cookie.setMaxAge(0);
+            resp.addCookie(cookie);
+            resp.sendRedirect("/products");
         }
     }
 }

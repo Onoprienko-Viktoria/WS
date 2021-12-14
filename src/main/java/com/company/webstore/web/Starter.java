@@ -5,11 +5,15 @@ import com.company.webstore.dao.jdbc.JdbcUserDao;
 import com.company.webstore.service.ProductService;
 import com.company.webstore.service.SecurityService;
 import com.company.webstore.service.UserService;
+import com.company.webstore.web.filters.SecurityFilter;
 import com.company.webstore.web.servlets.*;
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 
+import javax.servlet.DispatcherType;
+import java.util.EnumSet;
 
 
 public class Starter {
@@ -22,15 +26,19 @@ public class Starter {
         SecurityService securityService = new SecurityService(userService);
 
         ShowAllProductsServlet showAllProductsServlet = new ShowAllProductsServlet(productService, securityService);
-        AddProductServlet addProductServlet = new AddProductServlet(productService, securityService);
-        RemoveProductServlet removeProductServlet = new RemoveProductServlet(productService, securityService);
-        EditProductServlet editProductServlet = new EditProductServlet(productService, securityService);
+        AddProductServlet addProductServlet = new AddProductServlet(productService);
+        RemoveProductServlet removeProductServlet = new RemoveProductServlet(productService);
+        EditProductServlet editProductServlet = new EditProductServlet(productService);
         RegistrationServlet registrationServlet = new RegistrationServlet(securityService);
         LoginServlet loginServlet = new LoginServlet(securityService);
         LogoutServlet logoutServlet = new LogoutServlet(securityService);
 
         ServletContextHandler contextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
-        contextHandler.addServlet(new ServletHolder(showAllProductsServlet), "/*");
+
+        contextHandler.addFilter(new FilterHolder(new SecurityFilter(securityService)), "/*", EnumSet.of(DispatcherType.REQUEST));
+
+
+        contextHandler.addServlet(new ServletHolder(showAllProductsServlet), "/products");
         contextHandler.addServlet(new ServletHolder(addProductServlet), "/product/add");
         contextHandler.addServlet(new ServletHolder(removeProductServlet), "/product/remove");
         contextHandler.addServlet(new ServletHolder(editProductServlet), "/product/edit");
