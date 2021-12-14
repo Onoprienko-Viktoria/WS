@@ -31,9 +31,10 @@ public class AddProductServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         PageGenerator pageGenerator = PageGenerator.instance();
+        String token =WebUtils.getUserToken(req);
         try {
             Product product = WebUtils.getProduct(req);
-            productService.addProduct(product);
+            productService.addProduct(product, token);
             resp.sendRedirect("/products");
         } catch (Exception e) {
             String errorMessage = "Your product has not been added! Please, enter correct data in the fields";

@@ -13,4 +13,6 @@ public interface ProductDao {
     void removeProduct(int id);
 
     void editProduct(Product product);
+
+    List<Product> findProductsByAuthor(String author);
 }

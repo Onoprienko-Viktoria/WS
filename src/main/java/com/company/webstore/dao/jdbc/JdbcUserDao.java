@@ -52,11 +52,13 @@ public class JdbcUserDao implements UserDao {
     @Override
     public User findUserByEmail(User user) {
         try (Connection connection = getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement("SELECT password, sole FROM users WHERE email = ?")) {
+             PreparedStatement preparedStatement = connection.prepareStatement("SELECT name, email, password, sole FROM users WHERE email = ?")) {
             preparedStatement.setString(1, user.getEmail());
             try (ResultSet resultSet = preparedStatement.executeQuery();) {
                 if (resultSet.next()) {
                     return User.builder()
+                            .name(resultSet.getString("name"))
+                            .email(resultSet.getString("email"))
                             .sole(resultSet.getString("sole"))
                             .password(resultSet.getString("password"))
                             .build();
@@ -67,6 +69,7 @@ public class JdbcUserDao implements UserDao {
         }
         return null;
     }
+
 
     private Connection getConnection() throws SQLException {
         return DriverManager.getConnection("jdbc:postgresql://localhost:5433/ws", "user", "pass");

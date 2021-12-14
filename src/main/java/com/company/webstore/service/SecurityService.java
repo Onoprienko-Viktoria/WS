@@ -7,27 +7,21 @@ import java.util.*;
 
 public class SecurityService {
     private UserService userService;
-    private List<String> userTokens = Collections.synchronizedList(new ArrayList<>());
+    private Map<String, User> userTokens = Collections.synchronizedMap(new HashMap<>());
 
     public SecurityService(UserService userService) {
         this.userService = userService;
     }
 
     public boolean isAuth(String token) {
-        return userTokens.contains(token);
+        return userTokens.containsKey(token);
     }
 
-    public boolean removeToken(String token) {
-        if (userTokens.contains(token)) {
-            userTokens.remove(token);
-            return true;
-        }
-        return false;
-    }
+
 
     public String login(User user) {
         if (isUserExist(user)) {
-            return createToken();
+            return createToken(user);
         }
         throw new RuntimeException();
     }
@@ -51,9 +45,21 @@ public class SecurityService {
     }
 
 
-    private String createToken() {
+    private String createToken(User user) {
         String userToken = UUID.randomUUID().toString();
-        userTokens.add(userToken);
+        User foundUser = userService.findUserByEmail(user);
+        userTokens.put(userToken, foundUser);
         return userToken;
+    }
+
+    public boolean removeToken(String token) {
+        if (userTokens.containsKey(token)) {
+            userTokens.remove(token);
+            return true;
+        }
+        return false;
+    }
+    public User getUserByToken(String token){
+        return userTokens.get(token);
     }
 }

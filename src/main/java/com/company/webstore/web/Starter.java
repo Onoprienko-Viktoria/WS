@@ -21,9 +21,10 @@ public class Starter {
         JdbcProductDao jdbcProductDao = new JdbcProductDao();
         JdbcUserDao jdbcUserDao = new JdbcUserDao();
 
-        ProductService productService = new ProductService(jdbcProductDao);
+
         UserService userService = new UserService(jdbcUserDao);
         SecurityService securityService = new SecurityService(userService);
+        ProductService productService = new ProductService(jdbcProductDao, securityService);
 
         ShowAllProductsServlet showAllProductsServlet = new ShowAllProductsServlet(productService, securityService);
         AddProductServlet addProductServlet = new AddProductServlet(productService);
@@ -32,6 +33,7 @@ public class Starter {
         RegistrationServlet registrationServlet = new RegistrationServlet(securityService);
         LoginServlet loginServlet = new LoginServlet(securityService);
         LogoutServlet logoutServlet = new LogoutServlet(securityService);
+        UserCabinetServlet userCabinetServlet = new UserCabinetServlet(productService, securityService);
 
         ServletContextHandler contextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
 
@@ -45,6 +47,7 @@ public class Starter {
         contextHandler.addServlet(new ServletHolder(registrationServlet), "/registration");
         contextHandler.addServlet(new ServletHolder(loginServlet), "/login");
         contextHandler.addServlet(new ServletHolder(logoutServlet), "/logout");
+        contextHandler.addServlet(new ServletHolder(userCabinetServlet), "/cabinet");
 
         Server server = new Server(8081);
         server.setHandler(contextHandler);

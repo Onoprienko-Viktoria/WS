@@ -13,6 +13,9 @@
 <div class="container">
     <#if isAuth??>
         <div align="right">
+            <form style="display: inline-block;" action="/cabinet" target="_self">
+                <button class="btn btn-dark" >Cabinet</button>
+            </form>
             <form style="display: inline-block;" action="/product/add" target="_self">
                 <button class="btn btn-dark" >Add new product</button>
             </form>
@@ -39,6 +42,7 @@
             <th scope="col">Price</th>
             <th scope="col">Description</th>
             <th scope="col">Publish date</th>
+            <th scope="col">Author</th>
         </tr>
         </thead>
         <tr>
@@ -49,14 +53,7 @@
             <td>${product.price}</td>
             <td>${product.description}</td>
             <td>${product.publishDate}</td>
-            <#if isAuth??>
-                <td><form action="/product/edit" target="_self">
-                    <button class="btn btn-dark" value=${product.id} name="id"> Edit</button>
-                </form></td>
-                <td><form action="/product/remove" target="_self">
-                    <button class="btn btn-dark" value=${product.id} name="id"> Remove</button>
-                </form></td>
-            </#if>
+            <td>${product.authorName}</td>
         </tr>
         </#list>
         </tbody>

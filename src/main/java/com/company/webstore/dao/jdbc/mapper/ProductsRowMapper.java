@@ -13,12 +13,14 @@ public class ProductsRowMapper {
         double price = resultSet.getDouble("price");
         String description = resultSet.getString("description");
         Date publishDate = resultSet.getDate("date");
+        String authorName = resultSet.getString("author_name");
         return Product.builder().
                 id(id)
                 .name(name)
                 .price(price)
                 .description(description)
                 .publishDate(publishDate.toLocalDate())
+                .authorName(authorName)
                 .build();
     }
 }
