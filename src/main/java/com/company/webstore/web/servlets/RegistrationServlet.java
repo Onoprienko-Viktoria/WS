@@ -45,7 +45,7 @@ public class RegistrationServlet extends HttpServlet {
                     .build();
 
             try {
-                securityService.signUp(user);
+                securityService.register(user);
                 resp.sendRedirect("/");
 
             } catch (Exception e) {

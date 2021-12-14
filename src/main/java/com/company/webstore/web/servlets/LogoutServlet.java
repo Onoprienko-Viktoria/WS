@@ -20,7 +20,7 @@ public class LogoutServlet extends HttpServlet {
         boolean isAuth = securityService.isAuth(token);
         if (isAuth) {
             Cookie cookie = new Cookie("user-token", token);
-            if (securityService.removeCookie(cookie)) {
+            if (securityService.removeToken(token)) {
                 cookie.setMaxAge(0);
                 resp.addCookie(cookie);
                 resp.sendRedirect("/");

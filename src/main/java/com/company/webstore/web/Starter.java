@@ -4,6 +4,7 @@ import com.company.webstore.dao.jdbc.JdbcProductDao;
 import com.company.webstore.dao.jdbc.JdbcUserDao;
 import com.company.webstore.service.ProductService;
 import com.company.webstore.service.SecurityService;
+import com.company.webstore.service.UserService;
 import com.company.webstore.web.servlets.*;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
@@ -17,7 +18,8 @@ public class Starter {
         JdbcUserDao jdbcUserDao = new JdbcUserDao();
 
         ProductService productService = new ProductService(jdbcProductDao);
-        SecurityService securityService = new SecurityService(jdbcUserDao);
+        UserService userService = new UserService(jdbcUserDao);
+        SecurityService securityService = new SecurityService(userService);
 
         ShowAllProductsServlet showAllProductsServlet = new ShowAllProductsServlet(productService, securityService);
         AddProductServlet addProductServlet = new AddProductServlet(productService, securityService);

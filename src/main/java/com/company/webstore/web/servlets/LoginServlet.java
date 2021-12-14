@@ -43,7 +43,7 @@ public class LoginServlet extends HttpServlet {
                     .password(req.getParameter("password"))
                     .build();
             try {
-                token = securityService.signIn(user);
+                token = securityService.login(user);
                 Cookie cookie = new Cookie("user-token", token);
                 resp.addCookie(cookie);
                 resp.sendRedirect("/");
