@@ -11,7 +11,7 @@ import java.util.List;
 public class JdbcProductDao implements ProductDao {
     private static final String FIND_ALL_SQL = "SELECT id, name, price, description,  date, author_name FROM Products";
     private static final String FIND_BY_AUTHOR_SQL = "SELECT id, name, price, description,  date, author_name FROM Products WHERE author_name = ?";
-    private static final String UPDATE_SQL = "UPDATE products SET name = ?, price = ?, description = ? WHERE id = ?";
+    private static final String UPDATE_SQL = "UPDATE products SET name = ?, price = ?, description = ? WHERE id = ? AND author_name = ?";
     private static final String ADD_PRODUCT_SQL = """
             INSERT INTO products (name, price, description, date, author_name)
             VALUES(?, ?, ?, ?, ?)
@@ -35,11 +35,11 @@ public class JdbcProductDao implements ProductDao {
     }
 
     @Override
-    public List<Product> findProductsByAuthor(String author) {
+    public List<Product> findProductsByAuthor(String authorName) {
         List<Product> products = new ArrayList<>();
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_AUTHOR_SQL);){
-            preparedStatement.setString(1, author);
+            preparedStatement.setString(1, authorName);
              try(ResultSet resultSet = preparedStatement.executeQuery()) {
                  while (resultSet.next()) {
                      products.add(PRODUCTS_ROW_MAPPER.mapRow((resultSet)));
@@ -71,11 +71,12 @@ public class JdbcProductDao implements ProductDao {
     }
 
     @Override
-    public void removeProduct(int id) {
+    public void removeProduct(int id, String authorName) {
         try (Connection connection = getConnection();
              PreparedStatement statement = connection.prepareStatement(
-                     "DELETE FROM products WHERE id = ?")) {
+                     "DELETE FROM products WHERE id = ? AND author_name = ?")) {
             statement.setInt(1, id);
+            statement.setString(2, authorName);
             statement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException();
@@ -83,7 +84,7 @@ public class JdbcProductDao implements ProductDao {
     }
 
     @Override
-    public void editProduct(Product product) {
+    public void editProduct(Product product, String authorName) {
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_SQL)) {
             if (product.getPrice() < 0) {
@@ -93,6 +94,7 @@ public class JdbcProductDao implements ProductDao {
             preparedStatement.setDouble(2, product.getPrice());
             preparedStatement.setString(3, product.getDescription());
             preparedStatement.setInt(4, product.getId());
+            preparedStatement.setString(5, authorName);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException();

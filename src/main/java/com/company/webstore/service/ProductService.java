@@ -38,13 +38,13 @@ public class ProductService {
         System.out.println("Add product " + product.getName() + " by author: " + user.getName());
     }
 
-    public void removeProduct(int id) {
-        productDao.removeProduct(id);
-        System.out.println("Remove product with id " + id);
+    public void removeProduct(int id, String authorName) {
+        productDao.removeProduct(id, authorName);
+        System.out.println("Remove product with id " + id + "by author: " + authorName);
     }
 
-    public void editProduct(Product product) {
-        productDao.editProduct(product);
+    public void editProduct(Product product, String authorName) {
+        productDao.editProduct(product, authorName);
         System.out.println("Product edited");
     }
 

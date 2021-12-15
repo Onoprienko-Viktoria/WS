@@ -28,8 +28,8 @@ public class Starter {
 
         ShowAllProductsServlet showAllProductsServlet = new ShowAllProductsServlet(productService, securityService);
         AddProductServlet addProductServlet = new AddProductServlet(productService);
-        RemoveProductServlet removeProductServlet = new RemoveProductServlet(productService);
-        EditProductServlet editProductServlet = new EditProductServlet(productService);
+        RemoveProductServlet removeProductServlet = new RemoveProductServlet(productService, securityService);
+        EditProductServlet editProductServlet = new EditProductServlet(productService, securityService);
         RegistrationServlet registrationServlet = new RegistrationServlet(securityService);
         LoginServlet loginServlet = new LoginServlet(securityService);
         LogoutServlet logoutServlet = new LogoutServlet(securityService);

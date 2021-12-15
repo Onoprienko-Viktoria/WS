@@ -23,6 +23,7 @@ public class SecurityFilter implements Filter {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         String token = WebUtils.getUserToken(httpServletRequest);
         String requestURI = httpServletRequest.getRequestURI();
+
         for (String path : allowedPaths) {
             if (requestURI.startsWith(path)) {
                 chain.doFilter(request, response);
@@ -34,8 +35,6 @@ public class SecurityFilter implements Filter {
         } else {
             ((HttpServletResponse) response).sendRedirect("/login");
         }
-
-
     }
 
     @Override

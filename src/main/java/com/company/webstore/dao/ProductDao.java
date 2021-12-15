@@ -10,9 +10,9 @@ public interface ProductDao {
 
     void addProduct(Product product);
 
-    void removeProduct(int id);
+    void removeProduct(int id, String authorName);
 
-    void editProduct(Product product);
+    void editProduct(Product product, String authorName);
 
-    List<Product> findProductsByAuthor(String author);
+    List<Product> findProductsByAuthor(String authorName);
 }

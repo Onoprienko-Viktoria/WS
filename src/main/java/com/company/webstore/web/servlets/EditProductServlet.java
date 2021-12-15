@@ -2,6 +2,7 @@ package com.company.webstore.web.servlets;
 
 import com.company.webstore.entity.Product;
 import com.company.webstore.service.ProductService;
+import com.company.webstore.service.SecurityService;
 import com.company.webstore.web.utils.PageGenerator;
 import com.company.webstore.web.utils.WebUtils;
 
@@ -13,10 +14,12 @@ import java.io.IOException;
 
 public class EditProductServlet extends HttpServlet {
     private ProductService productService;
+    private SecurityService securityService;
     private int idOfEditProduct;
 
-    public EditProductServlet(ProductService productService) {
+    public EditProductServlet(ProductService productService, SecurityService securityService) {
         this.productService = productService;
+        this.securityService = securityService;
     }
 
 
@@ -32,10 +35,12 @@ public class EditProductServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         PageGenerator pageGenerator = PageGenerator.instance();
         try {
+            String token = WebUtils.getUserToken(req);
+            String authorName = securityService.getUserByToken(token).getName();
             Product product = WebUtils.getProduct(req);
             product.setId(idOfEditProduct);
-            productService.editProduct(product);
-            resp.sendRedirect("/products");
+            productService.editProduct(product, authorName);
+            resp.sendRedirect("/cabinet");
         } catch (Exception e) {
             String errorMessage = "Your product has not been edited! Please, enter correct data in the fields";
             String page = pageGenerator.getPageWithMessage("edit_product.html", errorMessage);
