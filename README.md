@@ -7,7 +7,8 @@ CREATE TABLE products(
 	name CHAR(50)  NOT NULL,
 	price numeric NOT NULL,
 	description CHAR(200) NOT NULL,
-	date date NOT NULL
+	date date NOT NULL,
+	author_name CHAR(100) NOT NULL
 );
 
 CREATE TABLE users( 
