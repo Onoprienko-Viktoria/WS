@@ -15,10 +15,10 @@
         <form style="display: inline-block;" action="/products" target="_self">
             <button class="btn btn-dark" >Return to products</button>
         </form>
-        <form style="display: inline-block;" action="/product/add" target="_self">
+        <form style="display: inline-block;" action="/products/add" target="_self">
             <button class="btn btn-dark" >Add new product</button>
         </form>
-        <form style="display: inline-block;" action="/logout" target="_self">
+        <form style="display: inline-block;" action="/user/logout" target="_self">
             <button class="btn btn-dark" >Logout</button>
         </form>
     </div>
@@ -46,10 +46,10 @@
         <td>${product.description}</td>
         <td>${product.publishDate}</td>
         <td>${product.authorName}</td>
-        <td><form action="/product/edit" target="_self">
+        <td><form action="/products/edit/${product.id}" target="_self">
             <button class="btn btn-dark" value=${product.id} name="id"> Edit</button>
         </form></td>
-        <td><form action="/product/remove" target="_self">
+        <td><form action="/products/remove/${product.id}" target="_self">
             <button class="btn btn-dark" value=${product.id} name="id"> Remove</button>
         </form></td>
     </tr>

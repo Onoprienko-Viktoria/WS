@@ -19,7 +19,7 @@
 <body>
 <div class="container">
     <h1>Login</h1>
-    <form action="/login" method="post">
+    <form action="/user/login" method="post">
         <div class="mb-3">
             <label class="form-label">Email</label>
             <input name="email" type="text" class="form-control" required="required">
@@ -32,7 +32,7 @@
         <button type="submit"class="btn btn-dark">Submit</button>
     </form>
     <h3>Not registered yet?</h3>
-    <form style="display: inline-block;" action="/registration" target="_self">
+    <form style="display: inline-block;" action="/user/registration" target="_self">
         <button class="btn btn-dark" >Registration</button>
     </form>
     <form style="display: inline-block;" action="/products" target="_self">

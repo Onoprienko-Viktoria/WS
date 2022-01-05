@@ -13,22 +13,22 @@
 <div class="container">
     <#if isAuth??>
         <div align="right">
-            <form style="display: inline-block;" action="/cabinet" target="_self">
+            <form style="display: inline-block;" action="/user/cabinet" target="_self">
                 <button class="btn btn-dark" >Cabinet</button>
             </form>
-            <form style="display: inline-block;" action="/product/add" target="_self">
+            <form style="display: inline-block;" action="/products/add" target="_self">
                 <button class="btn btn-dark" >Add new product</button>
             </form>
-            <form style="display: inline-block;" action="/logout" target="_self">
+            <form style="display: inline-block;" action="/user/logout" target="_self">
                 <button class="btn btn-dark" >Logout</button>
             </form>
         </div>
     <#else>
         <div align="right">
-            <form style="display: inline-block;" action="/login" target="_self">
+            <form style="display: inline-block;" action="/user/login" target="_self">
                 <button class="btn btn-dark" >Login</button>
             </form>
-            <form style="display: inline-block;"  action="/registration" target="_self">
+            <form style="display: inline-block;"  action="/user/registration" target="_self">
                 <button class="btn btn-dark" >Registration</button>
             </form>
         </div>

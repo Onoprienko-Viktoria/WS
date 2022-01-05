@@ -20,7 +20,7 @@
 <body>
 <div class="container">
     <h1>Registration</h1>
-    <form action="/registration" method="post">
+    <form action="/user/registration" method="post">
         <div class="mb-3">
             <label class="form-label">Name</label>
             <input name="name" type="name" class="form-control" required="required" id="name" >
@@ -36,7 +36,7 @@
         <button type="submit"class="btn btn-dark">Submit</button>
     </form>
     <h3>Already registered?</h3>
-    <form style="display: inline-block;" action="/login" target="_self">
+    <form style="display: inline-block;" action="/user/login" target="_self">
         <button class="btn btn-dark" >Login</button>
     </form>
     <form style="display: inline-block;" action="/products" target="_self">

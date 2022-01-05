@@ -2,13 +2,19 @@ package com.company.webstore.service;
 
 import com.company.webstore.entity.User;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.*;
 
+
+@Service
 public class SecurityService {
     private UserService userService;
     private Map<String, User> userTokens = Collections.synchronizedMap(new HashMap<>());
 
+    @Autowired
     public SecurityService(UserService userService) {
         this.userService = userService;
     }

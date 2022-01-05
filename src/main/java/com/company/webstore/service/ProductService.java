@@ -3,14 +3,20 @@ package com.company.webstore.service;
 import com.company.webstore.dao.ProductDao;
 import com.company.webstore.entity.Product;
 import com.company.webstore.entity.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
 
+
+@Service
 public class ProductService {
     private ProductDao productDao;
     private SecurityService securityService;
 
+    @Autowired
     public ProductService(ProductDao productDao, SecurityService securityService) {
         this.productDao = productDao;
         this.securityService = securityService;
@@ -46,6 +52,12 @@ public class ProductService {
     public void editProduct(Product product, String authorName) {
         productDao.editProduct(product, authorName);
         System.out.println("Product edited");
+    }
+
+    public Product getProduct(int id){
+        Product product = productDao.getProduct(id);
+        System.out.println("Get product by id: " + id);
+        return product;
     }
 
 }

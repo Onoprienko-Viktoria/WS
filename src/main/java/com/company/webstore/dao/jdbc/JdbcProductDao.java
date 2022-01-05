@@ -3,13 +3,17 @@ package com.company.webstore.dao.jdbc;
 import com.company.webstore.dao.ProductDao;
 import com.company.webstore.dao.jdbc.mapper.ProductsRowMapper;
 import com.company.webstore.entity.Product;
+import org.springframework.stereotype.Component;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+
+@Component
 public class JdbcProductDao implements ProductDao {
     private static final String FIND_ALL_SQL = "SELECT id, name, price, description,  date, author_name FROM Products";
+    private static final String FIND_BY_ID_SQL = "SELECT id, name, price, description,  date, author_name FROM Products WHERE id = ?";
     private static final String FIND_BY_AUTHOR_SQL = "SELECT id, name, price, description,  date, author_name FROM Products WHERE author_name = ?";
     private static final String UPDATE_SQL = "UPDATE products SET name = ?, price = ?, description = ? WHERE id = ? AND author_name = ?";
     private static final String ADD_PRODUCT_SQL = """
@@ -42,10 +46,26 @@ public class JdbcProductDao implements ProductDao {
             preparedStatement.setString(1, authorName);
              try(ResultSet resultSet = preparedStatement.executeQuery()) {
                  while (resultSet.next()) {
-                     products.add(PRODUCTS_ROW_MAPPER.mapRow((resultSet)));
+                     products.add(PRODUCTS_ROW_MAPPER.mapRow(resultSet));
                  }
                  return products;
              }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException();
+        }
+    }
+
+    @Override
+    public Product getProduct(int id) {
+        try (Connection connection = getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(FIND_BY_ID_SQL);){
+            preparedStatement.setInt(1, id);
+            try(ResultSet resultSet = preparedStatement.executeQuery()) {
+                resultSet.next();
+                Product product = PRODUCTS_ROW_MAPPER.mapRow(resultSet);
+                return product;
+            }
         } catch (SQLException e) {
             e.printStackTrace();
             throw new RuntimeException();

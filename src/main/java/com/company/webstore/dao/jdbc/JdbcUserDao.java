@@ -3,11 +3,14 @@ package com.company.webstore.dao.jdbc;
 import com.company.webstore.dao.UserDao;
 import com.company.webstore.entity.User;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.springframework.stereotype.Component;
 
 import java.sql.*;
 import java.util.Objects;
 import java.util.UUID;
 
+
+@Component
 public class JdbcUserDao implements UserDao {
     private static final String ADD_USER = """
             INSERT INTO users (name, email, password, sole)
